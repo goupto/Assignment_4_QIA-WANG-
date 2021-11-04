@@ -1,0 +1,54 @@
+#1) Load the price index .csv file attached via this assignment#########################
+destfile<- "D:\\One\\OneDrive\\My research\\5th semester\\R\\Assignment 4\\food-price-index-September-2021-index-numbers-csv-tables.csv"
+pricedata<- read.csv(destfile) #load the file
+
+#2) Use 4 methods that you learned in the last two sessions to manipulate the dataset####
+#2.1: read the data file and overview its content
+head(pricedata,n=3) # check the first 3 row
+tail(pricedata,n=10)# check the last 10 row
+summary(pricedata) # summary of the object
+dim(pricedata) # check the dimension
+names(pricedata) # check the object names
+str(pricedata)# the structure
+attributes(pricedata)# object's attributes
+hist(pricedata$Data_value)# Use a histogram to display data distribution
+table(pricedata$Data_value) # Frequency of occurrence of each value
+pricedata[pricedata$Series_reference=="CPIM.SAP0100",] # All rows where Series_reference is "CPIM.SAP0100"
+is.factor(pricedata$Series_title_1) # Determine whether it is factor data
+as.factor(pricedata$Series_title_1) # Convert to factor data
+
+#2.2: Remove the missing data
+colSums(is.na(pricedata))
+count(which(is.na(pricedata))) # Find the location of the missing value NA
+#2.1.1 Method 1: na.omit()
+good1<-na.omit(pricedata)
+#2.1.2 Method 2: complete.cases()
+good2<-pricedata[complete.cases(pricedata),] 
+#2.1.3 Method 3: is.na()
+badrow<-which(rowSums(is.na(pricedata))>0) # Find the rows with missing values in the table "pricedata"
+bad<-pricedata[badrow,] # Save these rows with missing values in a table "bad"
+good3<-pricedata[-badrow,] # Save rows without missing values in the original table
+
+#2.3: Modify table
+names(good3)[1]<-"reference" # Change the factor name through the names() function
+names(good3)[1]<-"Series_reference" #Change it back
+
+#2.4: Sub-setting the data set
+#2.4.1 Method 1: Remove the unwanted columns
+newdata1<- good3[,-c(4:7)]# Remove columns with unique values
+#2.4.2 Method 2: Select the wanted columns
+newdata2<-good3[,c(1:3,8)]
+
+
+#3)Use the factor function for column "Series_title_1" and get the average for each product using the price values in column "Data_value" by sapply function####
+splitmean <- function(newdata1) {
+  s <- split( newdata1, newdata1$Series_title_1)
+  sapply( s, function(x) mean(x$Data_value) )
+}
+splitmean(newdata1)
+
+#4) Push the r file into your GitHub like before and submit your GitHub link like prior assignments####
+
+
+
+
