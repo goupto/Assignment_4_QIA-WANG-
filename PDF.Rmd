@@ -1,3 +1,18 @@
+---
+title: |
+ | Logistics data analysis using R programming
+ | [202102-LSB5019-001]
+ |
+ | Assignment 4
+author: |
+ | QIA WANG
+ | (91219618)
+date: "2021-11-04"
+output: pdf_document
+classoption: landscape
+---
+
+```{r}
 #1) Load the price index .csv file attached via this assignment#########################
 destfile<- "D:\\One\\OneDrive\\My research\\5th semester\\R\\Assignment 4\\food-price-index-September-2021-index-numbers-csv-tables.csv"
 pricedata<- read.csv(destfile) #load the file
@@ -20,13 +35,16 @@ is.factor(pricedata$Series_title_1) # Determine whether it is factor data
 #2.2: Remove the missing data
 colSums(is.na(pricedata))
 #2.1.1 Method 1: na.omit()
-dim(good1)<-na.omit(pricedata)
+good1<-na.omit(pricedata)
+dim(good1)
 #2.1.2 Method 2: complete.cases()
-dim(good2)<-pricedata[complete.cases(pricedata),] 
+good2<-pricedata[complete.cases(pricedata),] 
+dim(good2)
 #2.1.3 Method 3: is.na()
 badrow<-which(rowSums(is.na(pricedata))>0) # Find the rows with missing values in the table "pricedata"
 bad<-pricedata[badrow,] # Save these rows with missing values in a table "bad"
-dim(good3)<-pricedata[-badrow,] # Save rows without missing values in the original table
+good3<-pricedata[-badrow,] # Save rows without missing values in the original table
+dim(good3)
 
 #2.3: Modify table
 names(good3)[1]<-"reference" # Change the factor name through the names() function
@@ -46,13 +64,11 @@ splitmean <- function(newdata1) {
   sapply( s, function(x) mean(x$Data_value) )
 }
 splitmean(newdata1)
-
+```
 #4) Push the r file into your GitHub like before and submit your GitHub link like prior assignments####
-#When you read this, I have finished uploading.
 
-#Thanks for your patience!
-  
-#THE END
+When you read this, I have finished uploading.
 
+Thanks for your patience!
 
-
+THE END
