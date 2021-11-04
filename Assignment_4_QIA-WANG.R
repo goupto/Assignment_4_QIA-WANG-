@@ -3,9 +3,9 @@ destfile<- "D:\\One\\OneDrive\\My research\\5th semester\\R\\Assignment 4\\food-
 pricedata<- read.csv(destfile) #load the file
 
 #2) Use 4 methods that you learned in the last two sessions to manipulate the dataset####
-#2.1: read the data file and overview its content
-head(pricedata,n=3) # check the first 3 row
-tail(pricedata,n=10)# check the last 10 row
+#2.1: read the data file and overview its content (library(data.table))
+head(pricedata,n=3) # check the first 3 rows
+tail(pricedata,n=10)# check the last 10 rows
 summary(pricedata) # summary of the object
 dim(pricedata) # check the dimension
 names(pricedata) # check the object names
@@ -13,39 +13,74 @@ str(pricedata)# the structure
 #attributes(pricedata)# object's attributes
 hist(pricedata$Data_value)# Use a histogram to display data distribution
 table(pricedata$Data_value)[1:5] # Frequency of occurrence of the first 5 values
-pricedata[pricedata$Series_title_1=="Olives, jar, 400g",] # All rows where Series_reference is "CPIM.SAP0100"
 is.factor(pricedata$Series_title_1) # Determine whether it is factor data
 #as.factor(pricedata$Series_title_1) # Convert to factor data
 
 #2.2: Remove the missing data
 colSums(is.na(pricedata))
-#2.1.1 Method 1: na.omit()
-dim(good1)<-na.omit(pricedata)
-#2.1.2 Method 2: complete.cases()
-dim(good2)<-pricedata[complete.cases(pricedata),] 
-#2.1.3 Method 3: is.na()
+#2.2.1 Method 1: na.omit()
+good1<-na.omit(pricedata)
+dim(good1)
+#2.2.2 Method 2: complete.cases()
+good2<-pricedata[complete.cases(pricedata),] 
+dim(good2)
+#2.2.3 Method 3: is.na()
 badrow<-which(rowSums(is.na(pricedata))>0) # Find the rows with missing values in the table "pricedata"
 bad<-pricedata[badrow,] # Save these rows with missing values in a table "bad"
-dim(good3)<-pricedata[-badrow,] # Save rows without missing values in the original table
+good3<-pricedata[-badrow,] # Save rows without missing values in the original table
+dim(good3)
 
 #2.3: Modify table
+#2.3.1 Change the factor name
 names(good3)[1]<-"reference" # Change the factor name through the names() function
 names(good3)[1]<-"Series_reference" #Change it back
 
-#2.4: Sub-setting the data set
-#2.4.1 Method 1: Remove the unwanted columns
+#2.3.2 Sorting
+sordata<-sort(good1$Data_value,decreasing=TRUE)
+head(sordata)
+
+#2.3.3 Ordering
+#Method 1: order
+ordata<-good1[order(good1$Series_reference,good1$Data_value),]
+head(ordata)
+#Method 2: library(plyr)
+head(arrange(good1,Series_reference))
+
+#2.3.4 Adding new column
+#Method 1
+newdata<-transform(good1,price=(Data_value*100))# Add new column named "price"
+head(newdata,n=3)
+#Method 2: 
+ID<-1:25881
+df<-data.frame(ID,good3)# Add serial number column
+head(df,n=3)
+#2.4: Subsetting the data set
+#2.4.1 Remove the unwanted columns
 newdata1<- good3[,-c(4:7)]# Remove columns with unique values
 head(newdata1,n=3)
-#2.4.2 Method 2: Select the wanted columns
-newdata2<-good3[,c(1:3,8)]
+#2.4.2 Select the desired column with conditions
+# Method 1: Designated columns
+newdata2<-good3[,c(1:3,8)]#Specify columns 1 to 3 and column 8
 head(newdata2,n=3)
+# Method 2: Column containing key information
+Olives<-pricedata[pricedata$Series_title_1=="Olives, jar, 400g",] # All rows where Series_reference is "Olives, jar, 400g"
+head(Olives,n=2)
+# Method 3: The column containing the specified value
+ndata<-newdata[newdata$price<=50 | newdata$price>=500,]#Columns less than or equal to 50, or greater than or equal to 500
+head(ndata,n=2)
+# Method 4: The column containing the specified charactors
+ndata<-good3[good3$Period %in% c("2021.09"),] # %in%
+head(ndata,n=2)
+# Method 5: Casting data frames:library(reshape2)
+newdata3<-dcast(good3,Data_value~Series_reference)
+head(newdata3,n=1)
 
 #3)Use the factor function for column "Series_title_1" and get the average for each product using the price values in column "Data_value" by sapply function####
-splitmean <- function(newdata1) {
-  s <- split( newdata1, newdata1$Series_title_1)
+splitmean <- function(newdata2) {
+  s <- split( newdata2, newdata2$Series_title_1)
   sapply( s, function(x) mean(x$Data_value) )
 }
-splitmean(newdata1)
+splitmean(newdata2)
 
 #4) Push the r file into your GitHub like before and submit your GitHub link like prior assignments####
 #When you read this, I have finished uploading.
