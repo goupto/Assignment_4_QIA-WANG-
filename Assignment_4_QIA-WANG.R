@@ -76,11 +76,25 @@ newdata3<-dcast(good3,Data_value~Series_reference)
 head(newdata3,n=1)
 
 #3)Use the factor function for column "Series_title_1" and get the average for each product using the price values in column "Data_value" by sapply function####
-splitmean <- function(newdata2) {
-  s <- split( newdata2, newdata2$Series_title_1)
-  sapply( s, function(x) mean(x$Data_value) )
+#Method 1:
+price1<-data.frame() # create a empty dataframe
+n=1
+fac<-factor(newdata2$Series_title_1,ordered=TRUE) # extract the factor names
+while (n<=length(levels(fac))){
+  fac1<-newdata2[(newdata2$Series_title_1 %in% c(levels(fac)[n])),] # search the factor names in Series_title_1 one by one
+  x <- list(fac1$Data_value) # save the search results into x
+  price1<-rbind(c(levels(fac)[n],sapply(x, FUN = mean)),price1) #using sapply to calculate the average price, then using rbind to save the product name and its price into dataframe price1
+  n=n+1
 }
-splitmean(newdata2)
+names(price1)<-c("Product","Average Price") # set the columns names
+price1 # display the final results
+#Method 2:
+splitmean <- function(newdata2) { #build a function by split and sapply function
+  s <- split( newdata2, newdata2$Series_title_1) # split the data by Series_title_1
+  sapply( s, function(x) mean(x$Data_value) )# calculate the average price
+}
+price<-splitmean(newdata2) # call the function
+price # display the final results
 
 #4) Push the r file into your GitHub like before and submit your GitHub link like prior assignments####
 #When you read this, I have finished uploading.
@@ -89,5 +103,4 @@ splitmean(newdata2)
   
 #THE END
 
-
-
+formattable
