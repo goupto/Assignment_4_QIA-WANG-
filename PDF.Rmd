@@ -9,12 +9,17 @@ author: |
   | (91219618)
 date: '2021-11-04'
 output:
-  pdf_document: default
-  word_document: default
+  pdf_document: 
+    df_print: kable
   html_document:
     df_print: paged
+  word_document: default
 classoption: landscape
 ---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
 #1) Load the price index .csv file attached via this assignment#########################
 ```{r}
 destfile<- "D:\\One\\OneDrive\\My research\\5th semester\\R\\Assignment 4\\food-price-index-September-2021-index-numbers-csv-tables.csv"
