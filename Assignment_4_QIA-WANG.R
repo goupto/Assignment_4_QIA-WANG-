@@ -74,7 +74,9 @@ ndata<-good3[good3$Period %in% c("2021.09"),] # %in%
 head(ndata,n=2)
 # Method 5: Casting data frames:library(reshape2)
 newdata3<-dcast(good3,Data_value~Series_reference)
-head(newdata3,n=1)
+newdata3[1:3,1:5]
+library(xlsx)# save the results into xlsx file
+write.xlsx(newdata3,"D:\\One\\OneDrive\\桌面\\newdata3.xlsx",sheetName="newdata3",append=TRUE)
 
 #3)Use the factor function for column "Series_title_1" and get the average for each product using the price values in column "Data_value" by sapply function####
 #Method 1:
@@ -88,6 +90,9 @@ while (n<=length(levels(fac))){
   n=n+1
 }
 names(price1)<-c("Product","Average Price") # set the columns names
+price1$No.<-1:length(price1$Product)# generate a index column
+library(dplyr)
+price1 <-select(price1, "No.", "Product", "Average Price")# rearrange the order of columns
 price1 # display the final results
 #Method 2:
 splitmean <- function(newdata2) { #build a function by split and sapply function
@@ -95,12 +100,10 @@ splitmean <- function(newdata2) { #build a function by split and sapply function
   sapply( s, function(x) mean(x$Data_value) )# calculate the average price
 }
 price<-splitmean(newdata2) # call the function
-price # display the final results
-library(xlsx)
-write.xlsx(price1,"D:\\One\\OneDrive\\桌面\\price1.xlsx",sheetName="price1",append=TRUE)
-
+# display the final results
+price
 #4) Push the r file into your GitHub like before and submit your GitHub link like prior assignments####
-#When you read this, I have finished uploading.
+#When you read this, I have finished uploading.     
 
 #Thanks for your patience!
   
