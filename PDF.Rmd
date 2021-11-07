@@ -9,11 +9,11 @@ author: |
   | (91219618)
 date: '2021-11-04'
 output:
+  html_document:
+    df_print: paged
   pdf_document: 
     df_print: kable
     latex_engine: lualatex
-  html_document:
-    df_print: paged
   word_document:
     df_print: kable
 classoption: landscape
