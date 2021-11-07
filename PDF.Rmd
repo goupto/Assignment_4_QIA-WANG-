@@ -11,9 +11,11 @@ date: '2021-11-04'
 output:
   pdf_document: 
     df_print: kable
+    latex_engine: lualatex
   html_document:
     df_print: paged
-  word_document: default
+  word_document:
+    df_print: kable
 classoption: landscape
 ---
 ```{r setup, include=FALSE}
@@ -104,11 +106,6 @@ newdata3<-dcast(good3,Data_value~Series_reference)
 head(newdata3,n=1)
 ```
 
-
-
-
-
-
 #3)Use the factor function for column "Series_title_1" and get the average for each product using the price values in column "Data_value" by sapply function####
 ```{r}
 #Method 1:
@@ -130,10 +127,9 @@ splitmean <- function(newdata2) { #build a function by split and sapply function
 }
 price<-splitmean(newdata2) # call the function
 price # display the final results
+library(xlsx)
+write.xlsx(price1,"D:\\One\\OneDrive\\桌面\\price1.xlsx",sheetName="price1",append=TRUE)
 ```
-
-
-
 
 #4) Push the r file into your GitHub like before and submit your GitHub link like prior assignments####
 

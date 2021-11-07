@@ -4,6 +4,7 @@ pricedata<- read.csv(destfile) #load the file
 
 #2) Use 4 methods that you learned in the last two sessions to manipulate the dataset####
 #2.1: read the data file and overview its content (library(data.table))
+library(data.table)
 head(pricedata,n=3) # check the first 3 rows
 tail(pricedata,n=10)# check the last 10 rows
 summary(pricedata) # summary of the object
@@ -95,6 +96,8 @@ splitmean <- function(newdata2) { #build a function by split and sapply function
 }
 price<-splitmean(newdata2) # call the function
 price # display the final results
+library(xlsx)
+write.xlsx(price1,"D:\\One\\OneDrive\\桌面\\price1.xlsx",sheetName="price1",append=TRUE)
 
 #4) Push the r file into your GitHub like before and submit your GitHub link like prior assignments####
 #When you read this, I have finished uploading.
@@ -103,4 +106,4 @@ price # display the final results
   
 #THE END
 
-formattable
+
